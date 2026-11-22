@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>포켓 리세·부계관리 사용법</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+:root {
+  --bg:#f7f5f0; --card:#ffffff; --fg:#22201c; --dim:#77726a; --line:#e4dfd5;
+  --accent:#d9442f; --accent-soft:#fbe7e3; --ok:#2f8a57; --ok-soft:#e3f3e9;
+  --warn:#a86a00; --warn-soft:#fdf1d8; --code:#f0ece4; --shot:#1f2128; --shot-fg:#e7e7ea; --shot-dim:#9a9ca6; --shot-line:#33363f;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg:#16171a; --card:#1e2024; --fg:#ebe9e4; --dim:#9b978f; --line:#30333a;
+  --accent:#ff7a63; --accent-soft:#3a201c; --ok:#5cc58a; --ok-soft:#183024;
+  --warn:#f0b54a; --warn-soft:#33270f; --code:#272a30; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg:#16171a; --card:#1e2024; --fg:#ebe9e4; --dim:#9b978f; --line:#30333a;
+  --accent:#ff7a63; --accent-soft:#3a201c; --ok:#5cc58a; --ok-soft:#183024;
+  --warn:#f0b54a; --warn-soft:#33270f; --code:#272a30; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.75 "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+main { max-width: 760px; margin: 0 auto; }
+h1 { font-family:"Gowun Dodum", "Noto Sans KR", sans-serif; font-size: clamp(26px, 6vw, 36px);
+  line-height:1.3; margin: 0 0 6px; text-wrap: balance; }
+.lead { color: var(--dim); margin: 0 0 22px; }
+nav { background: var(--card); border:1px solid var(--line); border-radius: 14px; padding: 12px 16px; margin-bottom: 28px; }
+nav b { font-size: 13px; letter-spacing: .06em; color: var(--dim); }
+nav ol { margin: 4px 0 0; padding-left: 22px; columns: 2 220px; }
+nav a { color: var(--fg); text-decoration: none; border-bottom: 1px dotted var(--dim); }
+section { background: var(--card); border:1px solid var(--line); border-radius: 16px; padding: 20px 20px 8px; margin: 0 0 18px; }
+h2 { font-family:"Gowun Dodum", "Noto Sans KR", sans-serif; font-size: 22px; margin: 0 0 10px; display:flex; gap:10px; align-items: baseline; text-wrap: balance; }
+h2 .n { flex:none; display:inline-grid; place-items:center; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--accent); color: #fff; font: 700 15px/1 "Noto Sans KR", sans-serif; transform: translateY(-2px); }
+h3 { font-size: 16px; margin: 18px 0 4px; }
+p, li { max-width: 65ch; }
+ol, ul { padding-left: 22px; }
+li { margin: 3px 0; }
+code, .k { font-family: Consolas, "D2Coding", monospace; font-size: 14px; background: var(--code); padding: 1px 6px; border-radius: 6px; word-break: break-all; }
+.btn { display:inline-block; font-size: 14px; font-weight: 500; padding: 0 9px; border-radius: 7px; border:1px solid var(--line); background: var(--bg); white-space: nowrap; }
+.btn.red { background: var(--accent); color:#fff; border-color: transparent; }
+.tip, .warn, .ok { border-radius: 12px; padding: 10px 14px; margin: 12px 0 14px; font-size: 15px; }
+.tip { background: var(--code); }
+.warn { background: var(--warn-soft); border-left: 4px solid var(--warn); }
+.ok { background: var(--ok-soft); border-left: 4px solid var(--ok); }
+/* drawn "screenshots" of the MuMu settings / app windows */
+.shot { background: var(--shot); color: var(--shot-fg); border-radius: 12px; padding: 12px; margin: 12px 0 16px; font-size: 14px; overflow-x: auto; }
+.shot .bar { color: var(--shot-dim); font-size: 12px; margin-bottom: 8px; letter-spacing: .04em; }
+.shot .row { display:flex; justify-content: space-between; gap: 12px; align-items:center; padding: 9px 12px; border:1px solid var(--shot-line); border-radius: 8px; margin: 6px 0; min-width: 280px; }
+.shot .val { background:#2c2f38; padding: 2px 10px; border-radius: 6px; white-space: nowrap; }
+.shot .on { width: 34px; height: 18px; border-radius: 9px; background:#3b82f6; position: relative; flex:none; }
+.shot .on::after { content:""; position:absolute; right:3px; top:3px; width:12px; height:12px; border-radius:50%; background:#fff; }
+.shot .hl { outline: 2px solid #ff7a63; outline-offset: 2px; }
+.side { display:grid; grid-template-columns: 180px 1fr; gap: 10px; min-width: 420px; }
+.side .menu div { padding: 7px 10px; border-radius: 7px; margin-bottom: 4px; background:#2a2d35; }
+.side .menu .a { background:#d9442f; color:#fff; font-weight:700; }
+.side .menu .g { color: var(--shot-dim); background: transparent; font-size: 12px; padding: 6px 4px 2px; }
+.side .pane { border:1px solid var(--shot-line); border-radius: 8px; padding: 10px; color: var(--shot-dim); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; margin: 8px 0 14px; }
+.tw { overflow-x: auto; }
+th, td { border-bottom: 1px solid var(--line); padding: 7px 8px; text-align: left; vertical-align: top; }
+th { color: var(--dim); font-weight: 500; font-size: 13px; letter-spacing: .04em; }
+footer { color: var(--dim); font-size: 13px; text-align:center; margin-top: 26px; }
+#patch details { border-top:1px solid var(--line); padding:8px 0; }
+#patch summary { cursor:pointer; }
+#patch .pdate { color:var(--dim); font-size:14px; }
+#patch ul { margin:6px 0 4px; }
+.ph { font-family:"Gowun Dodum","Noto Sans KR",sans-serif; font-size:22px; margin:0 0 6px; }
+.lead2 { color:var(--dim); font-size:15px; margin:0 0 6px; }
+.ver { font-size:14px; color:var(--dim); font-weight:400; }
+.dl { display:block; text-align:center; background:var(--accent); color:#fff; text-decoration:none; font-weight:700; font-size:18px; padding:14px 16px; border-radius:14px; margin: 4px 0 6px; }
+.dl small { font-weight:400; opacity:.85; font-size:13px; }
+.dlnote { color:var(--dim); font-size:14px; text-align:center; margin:0 0 22px; }
+</style>
+</head>
+<body>
+<main>
+<h1>포켓 리세·부계관리 사용법 <span class="ver">v1.2</span></h1>
+<p class="lead">MuMu에 부계정들을 하나씩 돌려가며 무료팩, 스페셜팩, 미션 보상, 선물함을 알아서 챙겨 주고,
+계정마다 뭐가 나왔는지 <b>계정대장</b> 한 장으로 보여 주는 매크로예요. 돌릴 부계가 없을 땐 <b>리세</b>로 새 계정을 뽑아요. 천천히 따라 하면 돼요.</p>
+
+<a class="dl" href="https://github.com/pokepocket/Pocket/releases/latest/download/reroll-bugye.zip">⬇ 리세부계관리.zip 받기 <small>(v1.2 · 58MB · Windows · MuMu 12)</small></a>
+<p class="dlnote">받아서 압축 풀고 아래 순서대로 하면 돼요.</p>
+<nav><b>목차</b>
+<ol>
+<li><a href="#patch">패치노트</a></li>
+<li><a href="#need">준비물 · 받아야 할 것</a></li>
+<li><a href="#mumu">뮤뮤 세팅</a></li>
+<li><a href="#unzip">압축 풀기</a></li>
+<li><a href="#accounts">계정 넣기</a></li>
+<li><a href="#start">처음 켜기 · 인스턴스 고르기</a></li>
+<li><a href="#mode">모드 고르기 (리세 / 부계)</a></li>
+<li><a href="#discord">디스코드 알림 (선택)</a></li>
+<li><a href="#run">돌리기</a></li>
+<li><a href="#features">부계관리 기능</a></li>
+<li><a href="#reroll">리세</a></li>
+<li><a href="#ledger">계정대장 보기</a></li>
+<li><a href="#stop">멈추기</a></li>
+<li><a href="#faq">안 될 때</a></li>
+</ol></nav>
+
+
+<section id="patch">
+<h2 class="ph">패치노트</h2>
+<p class="lead2">업데이트할 때마다 여기 적어요. 새 버전은 zip을 다시 받아서 <code>PocketMacro.exe</code>만 바꾸면 돼요 (설정, 계정, 기록은 그대로).</p>
+<details open><summary><b>v1.2</b> <span class="pdate">2026-11-22</span> · 최신</summary><ul><li>「(루트 응답 없음)」 고침: MuMu 버전마다 루트 명령 방식이 달라서, su -c / adb 루트 / su 0 / su root 네 가지를 차례로 해 보고 되는 걸 기억해서 써요.</li><li>루트를 어떻게 시도했고 뭐라고 답했는지 logs\root_check.log 에 남겨요. 그래도 안 되면 이 파일을 보내 주세요.</li><li>PTCGPB 헬퍼를 받을 때 실행 기록에 「받는 중 → 받음 → 설치 완료」가 떠요. (exe만 켜서는 안 받고, 처음 ▶ 시작할 때 받아요)</li><li>사용법: 준비물, 부계관리 기능, 알아서 고치는 것(좀비 재시작), 안 될 때 항목 추가</li></ul></details>
+<details><summary><b>v1.1</b> <span class="pdate">2026-11-22</span></summary><ul><li>이미 켜져 있던 인스턴스의 계정이 「(루트 꺼짐, 계정없음)」으로 뜨고 안 빠지던 문제 고침: 처음 쓰는 PC에서 adb 연결을 안 하고 읽으려 했어요. 이제 읽기·꺼내기·넣기 전에 먼저 연결해요.</li><li>못 읽을 때 이유를 나눠서 보여 줘요: (adb 연결 안 됨) / (루트 응답 없음) / (로그인 안 됨)</li></ul></details>
+<details><summary><b>v1.0</b> <span class="pdate">2026-11-22</span></summary><ul><li>첫 배포: 리세 · 부계관리 · 계정대장</li><li>왼쪽 위 모드 선택: 리세 + 부계관리 / 리세만 / 부계관리만</li></ul></details>
+</section>
+
+<section id="need">
+<h2><span class="n">1</span>준비물 · 받아야 할 것</h2>
+<p>이 zip 말고 직접 받거나 켜 둬야 하는 건 아래가 전부예요.</p>
+<div class="tw"><table>
+<tr><th>뭐</th><th>어디서 · 어떻게</th><th>꼭?</th></tr>
+<tr><td><b>Windows 10 / 11 (64비트)</b></td><td>파이썬 같은 건 따로 안 깔아도 돼요. exe 안에 다 들어 있어요.</td><td>필수</td></tr>
+<tr><td><b>MuMu Player 12</b></td><td>공식 사이트 <code>mumuplayer.com</code>에서 받아 설치. 인스턴스는 MuMu 멀티 플레이어에서 만들어요.</td><td>필수</td></tr>
+<tr><td><b>포켓몬 카드 게임 Pocket</b></td><td>각 MuMu 인스턴스 안의 <b>플레이 스토어</b>에서 설치. 게임 언어는 한국어.</td><td>필수</td></tr>
+<tr><td><b>Windows 한국어 문자 인식(OCR)</b></td><td>한국어 윈도우면 이미 있어요. 영어 윈도우면 <b>설정 → 시간 및 언어 → 언어 → 한국어 추가</b> (기본 언어로 안 바꿔도 됨). 리세 결과랑 팩 포인트 읽을 때 써요.</td><td>필수</td></tr>
+<tr><td><b>인터넷</b></td><td>카드 정보 읽는 도우미(PTCGPB 헬퍼)를 <b>자동으로</b> 받아요. exe만 켜서는 안 받고, 처음 <span class="btn">▶ 시작</span>했을 때 받아요. 실행 기록에 「PTCGPB 헬퍼 받는 중 → 받음 → 설치 완료」가 떠요.</td><td>필수</td></tr>
+<tr><td>디스코드 웹후크</td><td>좋은 카드 알림 받고 싶을 때만. <a href="#discord">알림 설정</a> 참고.</td><td>선택</td></tr>
+<tr><td>PTCGPB 계정 파일(xml)</td><td>PTCGPB로 만들어 둔 계정이 있으면 그대로 넣어 쓰면 돼요. 없으면 리세로 만들면 돼요.</td><td>선택</td></tr>
+</table></div>
+<div class="tip">MuMu는 인스턴스 하나에 RAM을 꽤 써요. 처음엔 2~3개로 돌려 보고 늘리는 걸 추천해요.</div>
+</section>
+
+<section id="mumu">
+<h2><span class="n">2</span>뮤뮤 세팅</h2>
+<p>MuMu Player 12에서 부계 돌릴 인스턴스를 만들고, 인스턴스마다 <b>설정(톱니바퀴)</b>을 아래처럼 바꿔 주세요.
+다 바꾼 뒤 인스턴스를 한 번 껐다 켜야 적용돼요.</p>
+<div class="shot">
+  <div class="bar">디바이스 설정 › 보기</div>
+  <div class="row hl"><span>해상도 설정</span><span class="val">540 x 960, 240 DPI (휴대폰)</span></div>
+  <div class="row"><span>화면 설정</span><span class="val">세로</span></div>
+</div>
+<div class="shot">
+  <div class="bar">디바이스 설정 › 개발자 옵션</div>
+  <div class="row hl"><span>Root 권한 활성화</span><span class="on"></span></div>
+  <div class="row hl"><span>ADB 연결</span><span class="val">로컬 연결 활성화</span></div>
+</div>
+<ul>
+<li>해상도는 꼭 <b>540 × 960 (240 DPI)</b>. 다른 크기면 버튼을 못 찾아요.</li>
+<li><b>Root 권한</b>은 계정 바꿔 끼울 때 필요해요. 꺼져 있으면 로그인이 안 돼요.</li>
+<li>인스턴스마다 <b>포켓몬 카드 게임 Pocket</b>을 설치하고, 게임 언어는 <b>한국어</b>로 두세요.</li>
+<li>인스턴스 여러 개면 하나 다 맞춘 다음 <b>복제</b>하는 게 편해요.</li>
+</ul>
+<div class="warn"><b>본계정이 들어 있는 인스턴스는 쓰지 마세요.</b> 매크로가 계정을 바꿔 끼우기 때문에, 본계가 든 인스턴스를 고르면 로그아웃될 수 있어요.</div>
+</section>
+
+<section id="unzip">
+<h2><span class="n">3</span>압축 풀기</h2>
+<p><code>리세부계관리.zip</code>을 <code>C:\pocket\리세부계관리</code>처럼 <b>짧은 경로</b>에 풀어 주세요. 바탕화면이나 다운로드 폴더 안 깊숙이 두면 가끔 경로 문제가 나요.</p>
+<div class="tw"><table>
+<tr><th>파일 · 폴더</th><th>뭐예요</th></tr>
+<tr><td><code>PocketMacro.exe</code></td><td>매크로 본체. 이거 더블클릭하면 켜져요.</td></tr>
+<tr><td><code>macro_config.json</code></td><td>설정 파일. 보통은 안 건드려도 돼요.</td></tr>
+<tr><td><code>부계계정\Accounts\Saved\부계</code></td><td>부계정 로그인 파일(xml)을 넣는 곳</td></tr>
+<tr><td><code>부계계정\Accounts\Saved\리세</code></td><td>리세로 건진 계정이 자동으로 들어오는 곳</td></tr>
+<tr><td><code>reroll_target.json</code></td><td>리세 목표 카드 (리세 창에서 바꿔요)</td></tr>
+<tr><td><code>사용법.html</code></td><td>지금 보는 이 문서</td></tr>
+</table></div>
+<div class="tip">윈도우가 「PC 보호」 파란 창을 띄우면 <span class="btn">추가 정보</span> → <span class="btn">실행</span>을 누르면 돼요. 서명 안 된 프로그램이라 처음 한 번 뜨는 거예요.</div>
+</section>
+
+<section id="accounts">
+<h2><span class="n">4</span>계정 넣기</h2>
+<p>부계정은 <b>로그인 파일(xml)</b>로 관리해요. 둘 중 편한 방법으로 넣으면 돼요.</p>
+<h3>방법 A · PTCGPB 쓰던 사람</h3>
+<ol>
+<li>PTCGPB 폴더의 <code>Accounts\Saved\…</code> 안에 있는 <code>.xml</code> 파일들을 복사해요.</li>
+<li>매크로 왼쪽 메뉴 <span class="btn">부계 계정 폴더</span>를 누르면 폴더가 열려요. 거기 붙여 넣으면 끝.</li>
+</ol>
+<h3>방법 B · 인스턴스에 이미 로그인된 계정</h3>
+<ol>
+<li>그 계정이 로그인된 인스턴스를 켜 두고, 왼쪽 메뉴 <span class="btn">계정 꺼내기·넣기</span>를 열어요.</li>
+<li>인스턴스를 고르고 <span class="btn">⬇ 이 인스턴스 계정 꺼내기</span> → 로그인 파일이 저장돼요.</li>
+<li>오른쪽 저장된 계정 목록에서 골라 <span class="btn">→ 부계관리에 넣기</span>를 누르면 부계 폴더로 들어가요.</li>
+</ol>
+<div class="warn"><b>xml 파일 = 그 계정의 로그인 정보예요.</b> 남한테 주면 그 사람이 계정을 그대로 쓸 수 있어요. 절대 올리거나 보내지 마세요.</div>
+</section>
+
+<section id="start">
+<h2><span class="n">5</span>처음 켜기 · 인스턴스 고르기</h2>
+<ol>
+<li>쓸 MuMu 인스턴스들을 <b>먼저 켜 두고</b> <code>PocketMacro.exe</code>를 실행해요.</li>
+<li>위쪽 <span class="btn">⟳ 새로고침</span>을 누르면 켜진 인스턴스가 표에 나와요. 위에 ADB 경로가 보이면 연결 OK.</li>
+<li>왼쪽 <span class="btn red">부계관리</span>를 눌러 부계관리 창을 열어요.</li>
+<li>오른쪽 <span class="btn">인스턴스 고르기</span>에서 부계 돌릴 인스턴스를 체크하고 저장해요.</li>
+</ol>
+<div class="shot">
+  <div class="bar">포켓 리세·부계관리</div>
+  <div class="side">
+    <div class="menu">
+      <div class="g">모드</div>
+      <div>◉ 리세 + 부계관리 &nbsp;○ 리세만 &nbsp;○ 부계관리만</div>
+      <div class="g">실행</div>
+      <div class="a">리세</div>
+      <div class="a">부계관리</div>
+      <div class="g">계정</div>
+      <div>계정 꺼내기·넣기</div>
+      <div>계정 대장</div>
+      <div>부계 계정 폴더</div>
+    </div>
+    <div class="pane">■ 모두 중지 F8 &nbsp;·&nbsp; 인스턴스 표 &nbsp;·&nbsp; 실행 기록</div>
+  </div>
+</div>
+<div class="tip">처음 <span class="btn">▶ 시작</span>하면 카드 정보 도우미(PTCGPB 헬퍼)를 인터넷에서 한 번 받아서 인스턴스에 깔아요. 실행 기록에 「PTCGPB 헬퍼 받는 중 → 받음 → 설치 완료」가 뜨면 된 거예요.</div>
+</section>
+
+<section id="mode">
+<h2><span class="n">6</span>모드 고르기 (리세 / 부계)</h2>
+<p>왼쪽 위 <b>모드</b>에서 하고 싶은 것만 고르면 돼요. 언제든 바꿀 수 있고, 돌고 있던 워커는 하던 일 끝나고 바뀐 모드를 따라가요.</p>
+<div class="tw"><table>
+<tr><th>모드</th><th>하는 일</th><th>이런 사람</th></tr>
+<tr><td><b>리세 + 부계관리</b> (기본)</td><td>부계를 돌리고, 깔 계정이 없어서 쉴 때 리세. 리세로 건진 계정도 부계로 같이 돌려요.</td><td>둘 다 하고 싶은 사람</td></tr>
+<tr><td><b>리세만</b></td><td>계속 리세만 해요. 건진 계정은 <code>Saved\리세</code>에 모아만 두고 팩은 안 까요.</td><td>새 계정 뽑기만 원하는 사람</td></tr>
+<tr><td><b>부계관리만</b></td><td>부계만 돌리고, 쉴 땐 인스턴스를 꺼 둬요. 리세는 안 해요.</td><td>이미 계정이 있는 사람</td></tr>
+</table></div>
+<p>모드에 따라 왼쪽 <b>실행</b> 버튼도 바뀌어요. 리세만이면 <span class="btn red">리세</span>만, 부계관리만이면 <span class="btn red">부계관리</span>만 보여요.</p>
+<div class="tip">리세만 모드에서는 부계 폴더가 비어 있어도 돼요. 리세 창의 <span class="btn">인스턴스 고르기</span> → <span class="btn">▶ 전부 시작 (30초 간격)</span>으로 시작하면 끝.</div>
+</section>
+
+<section id="discord">
+<h2><span class="n">7</span>디스코드 알림 (선택)</h2>
+<p>좋은 카드(☆☆ 이상, 크라운, 이로치 등)가 나오면 디스코드로 알려 줘요. 안 쓰면 건너뛰어도 돼요.</p>
+<ol>
+<li>디스코드 서버에서 채널 설정 → <b>연동</b> → <b>웹후크</b> → <span class="btn">새 웹후크</span> → <span class="btn">웹후크 URL 복사</span>.</li>
+<li>부계관리 창 오른쪽 <span class="btn">디스코드 알림</span>을 누르고 복사한 주소를 붙여 넣고 저장.</li>
+</ol>
+<div class="tip">웹후크 주소도 남한테 보이면 아무나 그 채널에 글을 쓸 수 있어요. 캡처 올릴 때 가려 주세요.</div>
+</section>
+
+<section id="run">
+<h2><span class="n">8</span>돌리기</h2>
+<p>부계관리 창에서 <span class="btn">▶ 전부 시작</span> (또는 골라서 <span class="btn">▶ 선택 시작</span>). 이제 놔두면 돼요.</p>
+<p>계정마다 뭘 하는지는 바로 아래 <a href="#features">부계관리 기능</a>에 다 적어 뒀어요.</p>
+<h3>알아서 고치는 것</h3>
+<ul>
+<li><b>MuMu가 멈춤(좀비)</b>: adb가 끊기거나 화면·게임이 응답 없으면 그 인스턴스만 끄고 다시 켜서 이어서 해요.</li>
+<li><b>워커가 죽거나 15분 동안 멈춤</b>: 매크로 창이 켜져 있으면 알아서 다시 시작해요 (한 시간에 5번까지).</li>
+<li><b>PC를 껐다 켜면</b>: 자동으로 다시 시작하진 않아요. <code>PocketMacro.exe</code> 켜고 <span class="btn">▶ 전부 시작</span>만 누르면 하던 데서 이어서 해요.</li>
+</ul>
+<div class="tip">그래서 돌리는 동안엔 <b>매크로 창을 끄지 말고</b> 내려만 두세요.</div>
+<div class="ok"><b>안 쓰는 것:</b> 팩 모래시계, 포켓 골드는 절대 안 써요. 깐 결과는 계정마다 기록돼요.</div>
+<p>부계관리 창 아래 표에 계정마다 <b>깐 것 / 안 깐 것 / 좋은 거 / 실패</b>가 보여요. 행을 누르면 그 계정에서 나온 카드가 다 나와요.</p>
+</section>
+
+<section id="features">
+<h2><span class="n">9</span>부계관리 기능</h2>
+<p>계정 하나 들어갈 때마다 아래 순서대로 해요. 다 끝나면 다음 계정, 다 돌면 팩 파워가 찰 때까지 쉬어요.</p>
+<h3>계정 하나 들어가서</h3>
+<div class="tw"><table>
+<tr><th>#</th><th>하는 일</th><th>자세히</th></tr>
+<tr><td>1</td><td><b>로그인</b></td><td>xml로 계정을 바꿔 끼워요. 원래 들어 있던 계정은 백업해 둬요.</td></tr>
+<tr><td>2</td><td><b>무료팩</b></td><td>최신 확장팩을 까요. 부계관리 창에서 홈 화면 <b>왼쪽/가운데/오른쪽 팩</b> 중 하나로 고정할 수 있어요. 몬스터볼 크라운이 1장뿐인 계정은 2장 맞추라고 샤이닝 하이를 까요.</td></tr>
+<tr><td>3</td><td><b>스페셜 팩</b></td><td>그 주 스페셜 팩(1장짜리)이 열려 있고 스페셜 팩 파워가 있으면 같이 까요.</td></tr>
+<tr><td>4</td><td><b>팩 포인트</b></td><td>깔 때 옆에 나오는 팩 포인트를 읽어서 적어요. <b>1250</b>이 되면 ☆☆로 바꿀 수 있다고 알려 줘요.</td></tr>
+<tr><td>5</td><td><b>겟 챌린지</b></td><td>4코스트짜리만 해요. 챌린지 모래시계로 1코스트 반복은 안 해요.</td></tr>
+<tr><td>6</td><td><b>숍 매일 선물</b></td><td>숍의 무료 선물을 받아요.</td></tr>
+<tr><td>7</td><td><b>미션 보상</b></td><td>받을 수 있는 미션 보상을 전부 받아요.</td></tr>
+<tr><td>8</td><td><b>선물함</b></td><td>선물함을 다 받고, 팩이 들어 있으면 그 자리에서 까요.</td></tr>
+<tr><td>9</td><td><b>지닌 물건</b></td><td>빛의 모래, 숍 티켓 같은 걸 하루 두 번까지 읽어서 대장에 적어요.</td></tr>
+<tr><td>10</td><td><b>숍 티켓 교환</b></td><td>숍 티켓이 2장 이상이면 한 달에 한 번 팩 모래시계 → 챌린지 모래시계 순서로 바꿔요. ★★ 교환권이 있으면 교환하고, 받은 건 다음에 들어갈 때 선물함에서 받아요.</td></tr>
+<tr><td>11</td><td><b>친구 ID · 닉네임</b></td><td>계정마다 적어 둬서 대장에서 바로 보여요.</td></tr>
+<tr><td>12</td><td><b>커뮤니티 미션</b></td><td>만든 지 14일 넘은 계정끼리 짝을 지어 친구 추가, 나눠주기, 트레이드(◆·◆◆, 빛의 모래 안 듦), 「고마워!」까지 해요. 짝 말고 다른 친구 신청은 거절해요.</td></tr>
+</table></div>
+<h3>쉬는 동안</h3>
+<ul>
+<li><b>배틀 미션</b>: 대여 덱 + 오토로 레슨 → 스텝 업 → 혼자서 랜덤 배틀(초급)을 해서 미션을 채워요. 보상은 다음에 그 계정 들어갈 때 받아요.</li>
+<li><b>스텝 업 깨기</b>: 부계관리 창 체크박스를 켜 두면, 아직 안 깬 계정은 대여 덱으로 스텝 업 리스트를 깨요.</li>
+<li><b>리세</b>: 모드가 「리세 + 부계관리」면 남는 시간에 리세를 돌려요.</li>
+<li>할 게 없으면 <b>인스턴스를 꺼 두고</b>, 다음 계정 차례 5분 전에 다시 켜요.</li>
+</ul>
+<h3>알림 · 기록</h3>
+<ul>
+<li>☆☆ 이상, 크라운, 이로치, RGB 뮤가 나오면 디스코드로 알려 줘요. 어느 계정에서 뭐가 나왔는지 카드 ID도 같이 와요.</li>
+<li>팩 포인트 1250, 계정을 한 바퀴 다 돌았을 때도 알려 줘요.</li>
+<li>깐 카드는 계정마다 전부 기록돼서 부계관리 창 아래 표와 <a href="#ledger">계정대장</a>에 나와요.</li>
+</ul>
+<h3>절대 안 하는 것</h3>
+<ul>
+<li>팩 모래시계 쓰기, 포켓 골드 쓰기, 숍에서 골드 사기</li>
+<li>트레이드 파워 「+」 충전, 아이템 쓰기</li>
+</ul>
+</section>
+
+<section id="reroll">
+<h2><span class="n">10</span>리세</h2>
+<p>리세는 <b>부계관리가 깔 계정이 없어서 쉬는 동안</b> 같은 인스턴스에서 돌아가요 (리세만 모드면 계속 리세). 새 계정을 만들어 팩을 까 보고,
+목표 카드가 나오면 계정을 남기고 아니면 지우고 다시 해요. 부계관리를 돌리고 있으면 따로 켤 필요 없어요.</p>
+<ol>
+<li>왼쪽 <span class="btn red">리세</span>를 눌러 리세 창을 열어요.</li>
+<li>위쪽 버튼이 <span class="btn">■ 리세 끄기</span>면 켜져 있는 거예요 (「켜짐 — 부계관리 워커가 깔 계정이 없어 쉴 때 리세를 돌립니다」).</li>
+<li><span class="btn">목표 설정</span>: 카드 이름을 일부만 쳐도 찾아 줘요. 고른 카드를 <span class="btn">↓ 목표에 넣기</span>, 몇 장 나오면 달성인지 정하고 <span class="btn">저장</span>.</li>
+<li>아래 체크박스로 <b>뮤가 나와도 계정 보관</b>, <b>크라운 보관</b>, <b>스페셜 팩도 까기</b>를 고를 수 있어요.</li>
+<li>리세만 바로 돌리고 싶으면 <span class="btn">▶ 전부 시작 (30초 간격)</span>.</li>
+</ol>
+<ul>
+<li>남긴 계정은 <code>부계계정\Accounts\Saved\리세</code>로 들어가고, 그다음부터는 <b>부계관리가 알아서 같이 돌려요</b>.</li>
+<li><span class="btn">보관 계정 폴더</span>에서 건진 계정 xml을 볼 수 있어요. 리세 창 아래에 판 기록, 최근 깐 팩, 맞은 카드가 나와요.</li>
+<li>팩은 목표 카드가 있는 팩으로 자동으로 골라요.</li>
+</ul>
+<div class="tip">목표를 하나도 안 넣고 뮤·크라운 보관도 끄면 모든 계정을 버리게 되니 하나는 켜 두세요.</div>
+</section>
+
+<section id="ledger">
+<h2><span class="n">11</span>계정대장 보기</h2>
+<p>왼쪽 <span class="btn">계정 대장</span>을 누르면 브라우저에 대장이 열려요. 누를 때마다 새로 만들어요.</p>
+<ul>
+<li>위쪽 검색창에 <b>카드 이름</b>(예: 피카츄)을 치면 그 카드 있는 계정만 남고, 몇 장인지 세 줘요.</li>
+<li>등급 버튼(크라운, ☆☆☆, 이로치 등)을 누르면 그 등급 이상만 보여요.</li>
+<li><b>팩포</b> 칸은 팩 포인트예요. <b>1250</b>이 되면 ☆☆ 한 장으로 바꿀 수 있어서 따로 표시돼요. 칸을 누르면 어느 팩 포인트인지 나와요.</li>
+<li>카드나 상태 칸을 누르면 언제 뽑았는지 같은 자세한 정보가 떠요.</li>
+</ul>
+<div class="tip">대장 파일은 <code>accounts\export\계정대장.html</code>로 저장돼요. 남한테 보여 줄 땐 이 파일을 보내면 되는데, 계정 이름이랑 친구 ID가 들어 있으니 괜찮은지 먼저 확인하세요.</div>
+</section>
+
+<section id="stop">
+<h2><span class="n">12</span>멈추기</h2>
+<ul>
+<li><b>F8</b> 또는 <span class="btn red">■ 모두 중지</span>: 전부 멈춰요. 지금 까는 팩까지는 끝내고 멈춰요.</li>
+<li>부계관리 창의 <span class="btn">■ 선택 중지</span>: 고른 인스턴스만 멈춰요.</li>
+<li>다시 돌릴 땐 <span class="btn">▶ 전부 시작</span>만 누르면 이어서 해요. 어디까지 했는지 기억해요.</li>
+</ul>
+</section>
+
+<section id="faq">
+<h2><span class="n">13</span>안 될 때</h2>
+<div class="tw"><table>
+<tr><th>증상</th><th>해 볼 것</th></tr>
+<tr><td>위쪽 ADB 경로가 비어 있음 / 인스턴스가 안 나옴</td>
+<td>MuMu 켠 다음 <span class="btn">⟳ 새로고침</span>. 그래도 안 되면 <code>macro_config.json</code>을 메모장으로 열어 <code>"adb_path"</code>에 MuMu 설치 폴더의 <code>adb.exe</code> 경로를 넣어요. 예: <code>"C:/Program Files/Netease/MuMuPlayerGlobal-12.0/shell/adb.exe"</code> (역슬래시 대신 <code>/</code>)</td></tr>
+<tr><td>계정 꺼내기에서 <b>(adb 연결 안 됨)</b></td><td>MuMu가 켜져 있는지 보고 메인 창 <span class="btn">⟳ 새로고침</span> 후 다시 열기. 그래도 안 되면 인스턴스를 껐다 켜요.</td></tr>
+<tr><td>계정 꺼내기에서 <b>(루트 응답 없음)</b></td><td>인스턴스 설정 → 개발자 옵션 → <b>Root 권한</b> 켜고 <b>인스턴스 재시작</b>. MuMu 화면 안에 「루트 권한 허용?」 창이 떠 있으면 허용. 그래도 안 되면 <code>logs\root_check.log</code> 파일 내용을 보내 주세요 (루트를 어떤 방법으로 시도했고 뭐라고 답했는지 적혀 있어요).</td></tr>
+<tr><td>계정 꺼내기에서 <b>(로그인 안 됨)</b></td><td>그 인스턴스에 게임이 로그인된 적이 없어요. 게임을 켜서 홈 화면까지 들어간 다음 다시.</td></tr>
+<tr><td>로그인이 안 되고 계속 실패</td><td>그 인스턴스 설정에서 <b>Root 권한</b>이 켜져 있는지 확인하고 인스턴스를 재시작.</td></tr>
+<tr><td>화면을 못 찾고 같은 데서 멈춤</td><td>해상도가 <b>540 × 960 (240 DPI)</b>인지, 게임이 한국어인지 확인.</td></tr>
+<tr><td>계정이 0개로 나옴</td><td>xml이 <code>부계계정\Accounts\Saved\부계</code> 바로 안에 있는지 확인 (폴더 안의 폴더면 못 읽어요).</td></tr>
+<tr><td>뭐가 잘못됐는지 모르겠음</td><td><span class="btn">로그 폴더 열기</span> → 인스턴스별 폴더의 <code>pack13.log</code> 마지막 줄을 보면 거기서 뭘 하다 멈췄는지 나와요.</td></tr>
+</table></div>
+<div class="warn">MuMu 하나에 RAM을 너무 적게 주면 게임이 자주 튕겨요. 인스턴스 여러 개 돌릴 땐 PC 사양 보면서 개수를 맞춰 주세요.</div>
+</section>
+
+<footer>포켓 리세·부계관리 · 2026-11 · 개인 사용 목적으로만 써 주세요</footer>
+</main>
+</body>
+</html>

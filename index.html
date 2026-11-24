@@ -3,13 +3,13 @@
 <style>
 :root { --bg:#fbfaf8; --fg:#1d1c1a; --dim:#8a867f; --line:#e6e2db; --head:#f2efe9;
   --s2:#e8f1fb; --s3:#fdf1d8; --s4:#fbe3ef; --s5:#e6f5e8; --s6:#ece6fb; --s7:#fff1b8; --s8:#ffd6d6;
-  --g0b:#ffe0f4; --g0e:#ff4fc3; --g1b:#fff3c4; --g1e:#f5b800; --g2b:#eadfff; --g2e:#9b6bff; --g3b:#d8f6f0; --g3e:#1fc7a8; --g4b:#ffe1ea; --g4e:#ff4d7d; --g5b:#e5e7ee; --g5e:#8a93ad; --g6b:#e5e7ee; --g6e:#8a93ad; --g7b:#ffe7d1; --g7e:#ff8a1f; --g8b:#dceaff; --g8e:#3f8cff; --g9b:#e7f6d6; --g9e:#7ccf35; --g10b:#f2efe9; --g10e:#8f8b84; --g11b:#f2efe9; --g11e:#a7a29a; }
+  --g0b:#ffe0f4; --g0e:#ff4fc3; --g1b:#fff3c4; --g1e:#b8860b; --g2b:#eadfff; --g2e:#9b6bff; --g3b:#d8f6f0; --g3e:#1fc7a8; --g4b:#ffe1ea; --g4e:#ff4d7d; --g5b:#e5e7ee; --g5e:#8a93ad; --g6b:#e5e7ee; --g6e:#8a93ad; --g7b:#ffe7d1; --g7e:#ff8a1f; --g8b:#dceaff; --g8e:#3f8cff; --g9b:#e7f6d6; --g9e:#7ccf35; --g10b:#f2efe9; --g10e:#8f8b84; --g11b:#f2efe9; --g11e:#a7a29a; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#191817; --fg:#ece9e4; --dim:#8f8b84; --line:#33312e;
   --head:#232220; --s2:#1f3247; --s3:#43381c; --s4:#46243a; --s5:#1f3b25; --s6:#2f2950; --s7:#4d4314; --s8:#5a1f24;
-  --g0b:#4a1238; --g1b:#453500; --g2b:#2e1d57; --g3b:#0c3a35; --g4b:#4a1426; --g5b:#2a2e3a; --g6b:#2a2e3a; --g7b:#46260a; --g8b:#0f2647; --g9b:#22350d; --g10b:#232220; --g11b:#262421; color-scheme:dark; } }
+  --g0b:#4a1238; --g1b:#453500; --g1e:#f5b800; --g2b:#2e1d57; --g3b:#0c3a35; --g4b:#4a1426; --g5b:#2a2e3a; --g6b:#2a2e3a; --g7b:#46260a; --g8b:#0f2647; --g9b:#22350d; --g10b:#232220; --g11b:#262421; color-scheme:dark; } }
 :root[data-theme="dark"] { --bg:#191817; --fg:#ece9e4; --dim:#8f8b84; --line:#33312e;
   --head:#232220; --s2:#1f3247; --s3:#43381c; --s4:#46243a; --s5:#1f3b25; --s6:#2f2950; --s7:#4d4314; --s8:#5a1f24;
-  --g0b:#4a1238; --g1b:#453500; --g2b:#2e1d57; --g3b:#0c3a35; --g4b:#4a1426; --g5b:#2a2e3a; --g6b:#2a2e3a; --g7b:#46260a; --g8b:#0f2647; --g9b:#22350d; --g10b:#232220; --g11b:#262421; color-scheme:dark; }
+  --g0b:#4a1238; --g1b:#453500; --g1e:#f5b800; --g2b:#2e1d57; --g3b:#0c3a35; --g4b:#4a1426; --g5b:#2a2e3a; --g6b:#2a2e3a; --g7b:#46260a; --g8b:#0f2647; --g9b:#22350d; --g10b:#232220; --g11b:#262421; color-scheme:dark; }
 body { margin:0; padding-block:16px; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); background:var(--bg); color:var(--fg);
   font:14px/1.45 "Pretendard","Malgun Gothic",system-ui,sans-serif; }
 h1 { font-size:20px; margin:0 0 4px; } .meta { color:var(--dim); margin-bottom:12px; }
@@ -44,7 +44,8 @@ td.num { text-align:right; white-space:nowrap; } td.name { font-weight:600; whit
 .chip[data-r="g10"], .grade[data-r="g10"] { background:var(--g10b); border:1px solid var(--g10e); } .chip[data-r="g10"] > b, .grade[data-r="g10"] > b { color:var(--g10e); }
 .chip[data-r="g11"], .grade[data-r="g11"] { background:var(--g11b); border:1px solid var(--g11e); } .chip[data-r="g11"] > b, .grade[data-r="g11"] > b { color:var(--g11e); }
 /* Each grade its own hue (the user, 2026-11-24: 「이 색들 구분이 확실히 가면 좋을거같은데」). */
-.chip[data-r="g0"], .grade[data-r="g0"] { border-image:linear-gradient(90deg,#ff4f4f,#ffd24f,#4fff8a,#4fc3ff,#b04fff) 1; }
+.chip[data-r="g0"], .grade[data-r="g0"] { border:1px solid transparent;
+  background:linear-gradient(var(--g0b),var(--g0b)) padding-box, linear-gradient(90deg,#ff4f4f,#ffd24f,#4fff8a,#4fc3ff,#b04fff) border-box; }
 .snipe { color:var(--dim); font-size:12px; margin-top:2px; }
 .grades { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; align-items:center; }
 .grade { font:inherit; font-size:13px; color:var(--fg); border:1px solid transparent; border-radius:14px;
@@ -101,7 +102,7 @@ td.status { min-width:170px; max-width:230px; }
 }
 </style>
 <h1>계정 대장</h1>
-<div class="meta">계정 252개 · ☆☆ 이상 있는 계정 244 · 2026-11-24 21:53 기준 · 카드를 누르거나 마우스를 올리면 무슨 팩인지</div>
+<div class="meta">계정 252개 · ☆☆ 이상 있는 계정 244 · 2026-11-24 22:19 기준 · 카드를 누르거나 마우스를 올리면 무슨 팩인지</div>
 <div class="meta totals">트레이드 가능 165계정 · ✨빛의 모래 10,592,450</div>
 <div class="bar">
   <input id="q" placeholder="이름, 카드, 친구 ID로 찾기">

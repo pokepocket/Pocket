@@ -84,7 +84,7 @@ td.status { min-width:170px; max-width:230px; }
 }
 </style>
 <h1>계정 대장</h1>
-<div class="meta">계정 252개 · ☆☆ 이상 있는 계정 244 · 2026-11-24 21:42 기준 · 카드를 누르거나 마우스를 올리면 무슨 팩인지</div>
+<div class="meta">계정 252개 · ☆☆ 이상 있는 계정 244 · 2026-11-24 21:43 기준 · 카드를 누르거나 마우스를 올리면 무슨 팩인지</div>
 <div class="meta totals">트레이드 가능 165계정 · ✨빛의 모래 10,592,450</div>
 <div class="bar">
   <input id="q" placeholder="이름, 카드, 친구 ID로 찾기">
@@ -416,7 +416,9 @@ const body = document.querySelector("#t tbody"), bar = document.getElementById("
   above = document.getElementById("above"), buttons = [...bar.querySelectorAll(".grade")];
 const tbar = document.getElementById("tiers"), tabove = document.getElementById("tabove"),
   tbuttons = [...tbar.querySelectorAll(".grade")];
-let picked = null, tpicked = null;                       // the grade button chosen, or null for all
+// Several grades / tiers at once (the user, 2026-11-24: 「티어라던지 등급이라던지
+// 중복선택이 안되네」): each tap adds or removes one; none = all.
+const picked = new Set(), tpicked = new Set();
 // Each row's and chip's text, lowercased once (searching re-read the whole
 // table on every keystroke — the user, 2026-11-22: 검색이 빠릿하지 않음).
 const ROWS = [...body.rows].map(tr => ({tr, text: tr.textContent.toLowerCase(),
@@ -426,10 +428,13 @@ const ONES = new Set(ONE.split(" ").filter(Boolean));
 function filter() {
   const text = q.value.trim().toLowerCase();
   // The grades shown: the one picked, or it and every better one.
-  const shown = !picked ? null : new Set(buttons.filter(b => b === picked
-    || (above.checked && +b.dataset.score >= +picked.dataset.score)).map(b => b.dataset.r));
-  const tshown = !tpicked ? null : new Set(tbuttons.filter(b => b === tpicked
-    || (tabove.checked && +b.dataset.rank >= +tpicked.dataset.rank)).map(b => b.dataset.t));
+  // 「고른 … 이상」: from the lowest one picked up.
+  const low = Math.min(...[...picked].map(b => +b.dataset.score));
+  const shown = !picked.size ? null : new Set(buttons.filter(b => picked.has(b)
+    || (above.checked && +b.dataset.score >= low)).map(b => b.dataset.r));
+  const tlow = Math.min(...[...tpicked].map(b => +b.dataset.rank));
+  const tshown = !tpicked.size ? null : new Set(tbuttons.filter(b => tpicked.has(b)
+    || (tabove.checked && +b.dataset.rank >= tlow)).map(b => b.dataset.t));
   let rows = 0, cards = 0, cardRows = 0;
   for (const {tr, text: all, chips} of ROWS) {
     let hide = (text && !all.includes(text))
@@ -461,15 +466,15 @@ let soon = 0;
 const later = () => { clearTimeout(soon); soon = setTimeout(filter, 150); };
 const found = document.getElementById("found");
 buttons.forEach(b => b.addEventListener("click", () => {
-  picked = picked === b ? null : b;
-  buttons.forEach(x => x.classList.toggle("on", x === picked));
-  bar.classList.toggle("picked", !!picked);
+  picked.has(b) ? picked.delete(b) : picked.add(b);
+  b.classList.toggle("on", picked.has(b));
+  bar.classList.toggle("picked", picked.size > 0);
   filter();
 }));
 tbuttons.forEach(b => b.addEventListener("click", () => {
-  tpicked = tpicked === b ? null : b;
-  tbuttons.forEach(x => x.classList.toggle("on", x === tpicked));
-  tbar.classList.toggle("picked", !!tpicked);
+  tpicked.has(b) ? tpicked.delete(b) : tpicked.add(b);
+  b.classList.toggle("on", tpicked.has(b));
+  tbar.classList.toggle("picked", tpicked.size > 0);
   filter();
 }));
 tabove.addEventListener("input", filter);

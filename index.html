@@ -53,9 +53,37 @@ td.status { min-width:170px; max-width:230px; }
   width:min(420px, calc(100vw - 32px)); box-sizing:border-box; }
 #tip b { display:block; margin-bottom:4px; }
 .chip, .st, td.name { cursor:pointer; }
+
+@media (max-width: 700px) {
+  body { font-size:14px; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  .meta { font-size:12px; }
+  .bar { gap:6px 10px; } .bar label { font-size:13px; }
+  .grades { flex-wrap:nowrap; overflow-x:auto; padding-bottom:4px; margin-bottom:8px; scrollbar-width:none; }
+  .grades::-webkit-scrollbar { display:none; }
+  .grade { flex:none; font-size:12px; padding:2px 9px; }
+  .grades label { flex:none; font-size:12px; white-space:nowrap; }
+  .grades > .dim { flex:none; font-size:12px; }
+  .wrap { overflow:visible; border:0; }
+  #t { min-width:0; }
+  #t thead { display:none; }
+  #t, #t tbody { display:block; }
+  #t tbody tr { display:grid; grid-template-columns:1fr auto; gap:2px 8px; padding:10px 12px; margin:0 0 8px;
+    border:1px solid var(--line); border-radius:12px; contain-intrinsic-size:auto 120px; }
+  #t tbody tr[hidden] { display:none; }
+  #t td { display:block; border:0; padding:0; min-width:0; max-width:none; }
+  #t td.name { font-size:15px; align-self:center; }
+  #t td.status { justify-self:end; align-self:center; }
+  #t td.cards { grid-column:1 / -1; margin-top:4px; }
+  #t td.cards .chip { white-space:normal; font-size:12.5px; }
+  #t td.num, #t td.mono { font-size:12px; color:var(--dim); text-align:left; }
+  #t td.num::before { content:"✨ 모래 "; }
+  #t td.mono { justify-self:end; }
+  #t td.mono::before { content:"친구 ID "; }
+}
 </style>
 <h1>계정 대장</h1>
-<div class="meta">계정 252개 · ☆☆ 이상 있는 계정 244 · 2026-11-24 18:46 기준 · 카드를 누르거나 마우스를 올리면 무슨 팩인지</div>
+<div class="meta">계정 252개 · ☆☆ 이상 있는 계정 244 · 2026-11-24 18:51 기준 · 카드를 누르거나 마우스를 올리면 무슨 팩인지</div>
 <div class="meta totals">트레이드 가능 165계정 · ✨빛의 모래 10,592,450</div>
 <div class="bar">
   <input id="q" placeholder="이름, 카드, 친구 ID로 찾기">

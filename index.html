@@ -72,7 +72,7 @@ td.status { min-width:170px; max-width:230px; }
 #tip b { display:block; margin-bottom:4px; }
 .tourney { margin:4px 0 10px; border:1px solid var(--line); border-radius:10px; padding:6px 10px; }
 .tourney summary { cursor:pointer; font-weight:600; }
-.tourney .twrap { overflow-x:auto; } .tourney table.tt { border-collapse:collapse; width:100%; font-size:13px; margin-top:6px; }
+.tourney .twrap { overflow-x:auto; } .tourney table.tt { border-collapse:collapse; width:100%; min-width:0; font-size:13px; margin-top:6px; }
 .tourney .tt th, .tourney .tt td { border-bottom:1px solid var(--line); padding:4px 8px; text-align:left; white-space:nowrap; }
 .tourney .tt th.num, .tourney .tt td.num { text-align:center; width:3.2em; padding:4px 4px; }   /* 제목과 숫자 같은 줄 (the user, 2026-11-26: 줄안맞아) */
 .tierlink { display:inline-block; margin:0 0 8px; padding:4px 12px; border-radius:999px; border:1px solid var(--line);
@@ -111,8 +111,8 @@ td.status { min-width:170px; max-width:230px; }
 </style>
 <h1>계정 대장</h1>
 <a class="tierlink" href="https://pokepocket.github.io/Pocket/tiers/" target="_blank" rel="noopener">트레티어표 보기 →</a>
-<div class="meta">계정 255개 · ☆☆ 이상 있는 계정 247 · 2026-11-26 14:46 기준 · 카드를 누르거나 마우스를 올리면 무슨 팩인지 · 이름을 누르면 그 계정 카드 전부</div>
-<div class="meta totals">트레이드 가능 165계정 · ✨빛의 모래 12,200,322</div>
+<div class="meta">계정 255개 · ☆☆ 이상 있는 계정 247 · 2026-11-26 14:47 기준 · 카드를 누르거나 마우스를 올리면 무슨 팩인지 · 이름을 누르면 그 계정 카드 전부</div>
+<div class="meta totals">트레이드 가능 165계정 · ✨빛의 모래 12,200,462</div>
 <div class="bar">
   <input id="q" placeholder="이름, 카드, 친구 ID로 찾기">
   <select id="g" hidden><option value=""></option></select>
@@ -244,7 +244,7 @@ td.status { min-width:170px; max-width:230px; }
 스페셜 팩">뚜꾸리 <b>☆(스페셜)</b></span><span class="chip s1" data-r="g11" data-t="B" title="트레 티어 B
 스페셜 팩">리아코 <b>☆(스페셜)</b></span><span class="chip s1" data-r="g11" data-t="B" title="트레 티어 B
 스페셜 팩">수댕이 <b>☆(스페셜)</b></span></td><td class="num" data-v="87300" title="빛의 모래 87,300 · 트레이드 모래시계 72">87,300</td><td class="mono">0214887001579180</td></tr>
-<tr data-group="🆕 깡계정" data-good="18" data-trade="0" data-r=" g1 g10 g11 g2 g3 g4 g8 g9 " data-t=" B C D E 표밖 " data-s="개굴반장|미뇽|이상해꽃|일레즌|코스모움×2|펄기아"><td class="name">R13.35</td><td class="status" data-v="5"><span class="st wait" title="">트레 5일 남음</span></td><td class="cards"><span class="chip s7" data-r="g1" data-t="" title="듀얼 퓨전">기라티나 ex <b>크라운</b></span><span class="chip s6" data-r="g2" data-t="" title="듀얼 퓨전 (피카츄)">푸린 <b>☆☆☆(이머시브)</b></span><span class="chip s5" data-r="g3" data-t="E" title="트레 티어 E
+<tr data-group="🆕 깡계정" data-good="18" data-trade="0" data-r=" g1 g10 g11 g2 g3 g4 g8 g9 " data-t=" B C D E 표밖 " data-s="개굴반장|미뇽|비버니|이상해꽃|일레즌|코스모움×2|펄기아"><td class="name">R13.35</td><td class="status" data-v="5"><span class="st wait" title="">트레 5일 남음</span></td><td class="cards"><span class="chip s7" data-r="g1" data-t="" title="듀얼 퓨전">기라티나 ex <b>크라운</b></span><span class="chip s6" data-r="g2" data-t="" title="듀얼 퓨전 (피카츄)">푸린 <b>☆☆☆(이머시브)</b></span><span class="chip s5" data-r="g3" data-t="E" title="트레 티어 E
 듀얼 퓨전 (피카츄)">블레이범 ex <b>이로치☆☆</b></span><span class="chip s5" data-r="g3" data-t="D" title="트레 티어 D
 파동 비트">홍수몬 ex <b>이로치☆☆</b></span><span class="chip s4" data-r="g4" data-t="E" title="트레 티어 E
 듀얼 퓨전 (피카츄)">뜨아거 ex <b>☆☆(무지개)</b></span><span class="chip s4" data-r="g4" data-t="B" title="트레 티어 B
@@ -2004,7 +2004,7 @@ td.status { min-width:170px; max-width:230px; }
 듀얼 퓨전 (피카츄)">쥬레곤 <b>이로치☆</b></span><span class="chip s1" data-r="g11" data-t="B" title="트레 티어 B
 첫 파트너">꾸왁스 <b>☆(스페셜)</b></span><span class="chip s1" data-r="g11" data-t="B" title="트레 티어 B
 스페셜 팩">누리공 <b>☆(스페셜)</b></span><span class="chip s1" data-r="g11" data-t="B" title="트레 티어 B
-스페셜 팩">리아코 <b>☆(스페셜)</b></span></td><td class="num" data-v="30870" title="빛의 모래 30,870">30,870</td><td class="mono">1629571058431504</td></tr>
+스페셜 팩">리아코 <b>☆(스페셜)</b></span></td><td class="num" data-v="31010" title="빛의 모래 31,010">31,010</td><td class="mono">1629571058431504</td></tr>
 <tr data-group="⛏️ 광산 끝냄" data-good="11" data-trade="1" data-r=" g10 g11 g2 g3 g7 g8 g9 " data-t=" A B C D E SS 표밖 " data-s="개굴닌자|나로테|나루림|대여르|드닐레이브|래비풋|모르페코|빠르모트|사철록|아라리×2|이상해꽃|쫀도기|춤추새|파오리×2|펄기아×2|피카츄|하클B 메로엣타"><td class="name">1.6</td><td class="status" data-v="0"><span class="st ok" title="">트레 가능</span></td><td class="cards"><span class="chip s6" data-r="g2" data-t="" title="팩 모름">푸린 <b>☆☆☆(이머시브)</b></span><span class="chip s5" data-r="g3" data-t="" title="하이클래스팩 MEGA">메가디안시 ex <b>이로치☆☆</b></span><span class="chip s3" data-r="g8" data-t="D" title="트레 티어 D
 메가 라이징 (메가갸라도스)">쥬피썬더 ex <b>☆☆(특일)</b></span><span class="chip s3" data-r="g8" data-t="표밖" title="트레 티어 표밖 (E 아래)
 하이클래스팩 ex">하클A 피카츄 ex <b>☆☆(특일)</b></span><span class="chip s3" data-r="g8" data-t="E" title="트레 티어 E
